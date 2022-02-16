@@ -1,0 +1,551 @@
+---
+title: "MSc_CW2_131990_Rohan_Khanolkar"
+author: "Rohan Khanolkar"
+date: "15/01/2021"
+output: html_document
+---
+1. Bayesian networks and naïve Bayes classifiers.
+
+![](/Users/rohankhanolkar/Desktop/Data Analytics using R/Course Work 2/Picture 1.png){width=300}
+(a) Given a training dataset including 30 observations and a Bayesian network indicating the relationships between 3 features (i.e. Income, Student and Credit Rate), and the class attribute (i.e. Buy Computer), please create the conditional probability tables by hand.
+
+			Credit Rating 	
+Income	Student	Buying Comp	    Fair	 Excellent
+High 	TRUE	     Yes	1/2 = 0.500	1/2 = 0.500
+High 	TRUE	      No	3/4 = 0.750	1/4 = 0.250
+High 	FALSE	     Yes	1/3 = 0.333	2/3 = 0.667
+High 	FALSE	      No	1/3 = 0.333	2/3 = 0.667
+Low	TRUE	     Yes	2/4 = 0.500	2/4 = 0.500
+Low	TRUE	      No	6/8 = 0.750	2/8 = 0.250
+Low	FALSE	     Yes	1/3 = 0.333	2/3 = 0.667
+Low	FALSE	      No	2/3 = 0.667	1/3 = 0.333
+
+	        Income	
+Buy Computer	    High	    Low
+     Yes	5/12 = 0.417	7/12 = 0.583
+      No	7/18 = 0.389	11/18 = 0.611
+
+	        Student	
+Buy Computer	    TRUE	   FALSE
+     Yes	6/12 = 0.500	6/12 = 0.500
+      No	12/18 = 0.667	6/18 = 0.333
+
+
+                Buy Computer	
+     Yes	     No
+12/30 = 0.400	18/30 = 0.600
+
+
+(b) Make predictions for 2 testing observations by using a Bayesian network classifier.
+
+Observation 31 Calculation.
+
+P (Buy Computer = Yes | Income = Low , Student = True, Credit Rating = Excellent) 
+  = P(Credit Rating = Excellent | Income = Low, Student = True, Buy Computer = Yes) 
+  * P (Income = Low| Buy Computer = Yes) 
+  * P(Student = True | Buy Computer = Yes) 
+  * P(Buy Computer = Yes)
+
+  = 0.500 * 0.583 * 0.500 * 0.400 = 0.0583
+
+P (Buy Computer = No | Income = Low , Student = True, Credit Rating = Excellent) 
+  = P(Credit Rating = Excellent | Income = Low, Student = True, Buy Computer = No) 
+  * P (Income = Low| Buy Computer = No) 
+  * P(Student = True | Buy Computer = No) 
+  * P(Buy Computer = No)
+
+  = 0.250 * 0.661 * 0.667 * 0.600 = 0.0611
+
+*** So 0.0583 < 0.0611  so the answer for  Obersavation 31 is NO  ***
+
+
+Observation 32 Calculation =No (As  0.0389 < 0.0815)
+
+P (Buy Computer = Yes | Income = Low , Student = False, Credit Rating = Fair) 
+  = P(Credit Rating = Fair | Income = Low, Student = False, Buy Computer = Yes) 
+  * P (Income = Low| Buy Computer = Yes) 
+  * P(Student = False | Buy Computer = Yes) 
+  * P(Buy Computer = Yes)
+  
+  = 0.333 * 0.583 * 0.500 * 0.400 = 0.0389
+
+P (Buy Computer = No | Income = Low , Student = False, Credit Rating = Fair) 
+  = P(Credit Rating = Fair | Income = Low, Student = False, Buy Computer = No) 
+  * P (Income = Low| Buy Computer = No) 
+  * P(Student = False | Buy Computer = No) 
+  * P(Buy Computer = No)
+  
+  = 0.667 * 0.661 * 0.333 * 0.600 = 0.0815
+
+*** So 0.0389 < 0.0815  so the answer for  Obersavation 32 is NO  ***
+
+
+(c) Based on the conditional independence assumption between features, please create the conditional probability tables by hand.
+
+Solution: 
+
+We create conditional probablity table for each feature (i.e. Income, Student and Credit Rate)
+
+	                              Buy Computer	
+Income            	    Yes                         	No
+High	              5/12 = 0.417	                7/18 = 0.389
+Low	              7/12 = 0.583	                11/18 = 0.611
+		
+Student           	    Yes                         	No		
+TRUE	            6/12 = 0.500	                12/18 = 0.667
+FALSE	            6/12 = 0.500	                 6/18 = 0.333
+		
+Credit Rating               Yes                         	No		
+Fair	             5/12 = 0.417	                 12/18 = 0.667
+Excellent	     7/12 = 0.615	                  6/18 = 0.333
+
+Buy Computer              Yes                         	No
+     	            12/30 = 0.400	                18/30 = 0.600
+
+
+(d) Make predictions for 2 testing observations by using a naïve Bayes classifier.
+
+Solution:
+
+Probablity to buy a computer
+
+P (Income = High| Buy Computer = Yes) -          	     0.417
+P (Income = Low| Buy Computer = Yes)	-                    0.583
+P(Student = True | Buy Computer = Yes)	-                    0.500
+P(Student = False | Buy Computer = Yes)	 -                   0.500
+P(Credit Rating = Fair | Buy Computer = Yes)  -  	     0.417
+P(Credit Rating = Excellent | Buy Computer = Yes)	-    0.583
+
+
+Probablity to Not buy a computer	
+
+P (Income = High| Buy Computer = No) -              	   0.389
+P (Income = Low| Buy Computer = No)	-                  0.611
+P(Student = True | Buy Computer = No)	-                  0.667
+P(Student = False | Buy Computer = No) -                   0.333
+P(Credit Rating = Fair | Buy Computer = No) -              0.667
+P(Credit Rating = Excellent | Buy Computer = No) -         0.333
+
+
+
+
+From Observation no 31 we can note that  (Income = Low | Student = True | Credit Rating = Excellent)
+
+P(Buy Computer = Yes, Income = Low,Student = True, Credit Rating = Excellent) = P(Buy Computer = Yes, Income= Low) x P(Buy Computer = Yes, Student= True)X P(Buy Computer = Yes, Credit Rating = Excellent)X P(Buy Computer = Yes)
+
+= 0.583 * 0.500 * 0.583 * 0.400 = `0.068
+
+P(Buy Computer = No , Income = Low,Student = True, Credit Rating = Excellent) = P(Buy Computer = No, Income= Low) x P(Buy Computer = No, Student= True)X P(Buy Computer = No, Credit Rating = Excellent)X P(Buy Computer = No)
+= 0.611 * 0.667 * 0.333 * 0.600 = 0.081
+
+
+*** So 0.068 < 0.081  so the answer for  Obersavation 31 is No  ***
+
+
+From Observation no 32 we can note that  (Income = High | Student = True | Credit Rating = Fair)
+
+P(Buy Computer = Yes, Income = High,Student = True, Credit Rating = Fair) = P(Buy Computer = Yes, Income= High) x P(Buy Computer = Yes, Student= True)X P(Buy Computer = Yes, Credit Rating = Fair)X P(Buy Computer = Yes)
+
+= 0.417 * 0.500 * 0.417 * 0.400 = 0.034
+
+P(Buy Computer = No, Income = High,Student = True, Credit Rating = Fair)  = P(Buy Computer = No, Income = High,Student = True, Credit Rating = Fair) 
+
+= 0.389 * 0.667 * 0.667 * 0.600 = 0.103
+
+*** So 0.034 < 0.103  so the answer for  Obersavation 32 is No ***
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+2. Predicting room occupancy by using decision tree and random forests classification algorithms.
+
+(a) Load the room occupancy training and testing datasets that are also used for the 1st coursework. Train a decision tree classifier and evaluate the predictive performance by reporting the classification accuracy obtained on the testing dataset.
+```{r}
+# The codes used were loading training data:
+## File located on the computer desktop.
+
+mydataTrain <- read.csv(file= "/Users/rohankhanolkar/Desktop/Room_Occupancy_Training_set.txt",header = TRUE, sep = ",")
+View(mydataTrain)
+str(mydataTrain)
+dim(mydataTrain)
+summary(mydataTrain)
+nrow(mydataTrain)
+
+# The codes used were loading testing data:
+
+mydataTest <- read.csv(file= "/Users/rohankhanolkar/Desktop/Room_Occupancy_Testing_set.txt",header = TRUE, sep = ",")
+
+dim(mydataTest)
+str(mydataTest)
+summary(mydataTest)
+nrow(mydataTest)
+
+library(readr)
+library(dplyr)
+library(tree)
+
+mydataTrain$Occupancy = as.factor(mydataTrain$Occupancy)
+str(mydataTrain)
+
+mydataTest$Occupancy = as.factor(mydataTest$Occupancy)
+str(mydataTest)
+
+set.seed(2)
+Train <- mydataTrain
+Test <- mydataTest
+
+d_tree <- tree(Occupancy ~ ., Train)
+summary(d_tree)
+
+plot(d_tree)
+text(d_tree, pretty = 0)
+
+# Now to evaluate the performance
+pred_Occupancy <- predict(d_tree,Test,type = "class")
+Test$pred_Occupancy = pred_Occupancy
+View(Test) #In first three observation we can note that predicted value is different to the Trained value.
+c_matrix <- table(Test$Occupancy, Test$pred_Occupancy) 
+c_matrix
+model_Accuracy <- sum(diag(c_matrix)/sum(c_matrix))
+model_Accuracy
+model_ErrorRate <- 1-sum(diag(c_matrix)/sum(c_matrix))
+model_ErrorRate
+```
+(b) Output and analyse the tree learned by the decision tree algorithm, i.e. plot the tree structure and make a discussion about it.
+
+# The Tree Structure is plotted in the above section (i.e. Q2 a ).
+# The decision tree in the Training data set shows that if the Light less that 162.875 then the occupancy is zeor. When the light is more that 162.875 then the  occupancy is handed down to temperature. When the Temperature is less 22.2112 then the occupancy is 1 and if more than 22.2112 then it is handed down to check CO2 level. When the CO2 level is less htan 893.125 then it checks the humidity and if greater than 893.125 it check temprature. When humidity is greater is greater the 26.695 then the occupancy is 1 and if the tempreature is below 22.6417 then the occupancy is 1, else occupancy is 0 in both humidity and temperature. 
+
+# To find the accuracy of the model we have used the confusion matrix which shows "0" for 195 obersavation is accurate and 45 observation is wrong. Apart from theis "1" for 44 observations is accurate and 16 observation is wrong.
+
+# Thus the model accuracy is  0.7966667 i.e. 79.66 %
+# The model error rate is 0.2033333 i.e. 20.33 %
+
+
+(c) Train a random forests classifier and evaluate the predictive performance by reporting the classification accuracy obtained on the testing dataset. Define set.seed(1).
+```{r}
+mydataTrain$Occupancy = as.factor(mydataTrain$Occupancy)
+str(mydataTrain)
+
+mydataTest$Occupancy = as.factor(mydataTest$Occupancy)
+str(mydataTest)
+
+library(stats)
+library(dplyr)
+library(randomForest)
+
+
+Training <- mydataTrain
+Testing <- mydataTest
+
+#Building RandomForest
+set.seed(1)
+RFM <- randomForest(Occupancy ~ ., data = Training, mtry= 2, importance = TRUE)
+print(RFM)
+
+
+#Evaluating Model Accuracy 
+
+Occupancy_Pred <- predict(RFM, Testing)
+Testing$Occupancy_Pred = Occupancy_Pred
+View(Testing) #In first three observation we can note that predicted value is different to the Trained value.
+
+#Built a confusing matrix to evalute the model accuracy
+CFM <- table(Testing$Occupancy, Testing$Occupancy_Pred)
+CFM 
+
+# Classification Accuracy 
+classification_accuracy <- sum(diag(CFM)/sum(CFM))
+classification_accuracy 
+
+# Error Rate 
+classification_ErrorRate <- 1 - sum(diag(CFM)/sum(CFM))
+classification_ErrorRate 
+```
+(d) Output and analyse the feature importance obtained by the random forests classifier.
+
+# After usning View(Testing) command we can note that the  first three observation we can note that predicted value is different from original Texting data values.
+#  We can note from the confusion matrix that the observations with "0" is 176 and wrongly predicted observation are 64. Apart from this the observations with "1" is 54 and wrongly predicted observation are 6.
+# The classification accuracy is 0.7666667 i.e. 76.66 % 
+# The Model Error Rate is 0.2333333 i.e. 23.33 %
+```{r}
+importance(RFM)
+varImpPlot(RFM)
+barplot(sort(importance(RFM)[,1], decreasing = TRUE), xlab = "Relative Importance", horiz = TRUE,col = "blue", las = 1)
+
+```
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+3. Predicting wine quality by using support vector machine classification algorithm.
+
+(a) Download the full wine quality training and testing datasets from Moodle, and use the training dataset to find out the optimal value of hyperparameter C for a linear kernel-based svm.
+```{r}
+train_data <- read.csv(file= "/Users/rohankhanolkar/Desktop/Data Analytics using R/week 5/WineQuality_training.txt",header = TRUE, sep = ",")
+View(train_data)
+str(train_data)
+dim(train_data)
+summary(train_data)
+nrow(train_data)
+
+# The codes used were loading testing data:
+
+testing_data <- read.csv(file= "/Users/rohankhanolkar/Desktop/Data Analytics using R/week 5/WineQuality_testing.txt",header = TRUE, sep = ",")
+View(testing_data)
+dim(testing_data)
+str(testing_data)
+summary(testing_data)
+nrow(testing_data)
+
+
+library(e1071)
+library(caret)
+set.seed(1)
+
+train_data[train_data$quality=='Good','quality'] <-1
+train_data[train_data$quality=='Bad','quality'] <-0
+data_training_no_quality <-train_data[-c(12)]
+testing_data[testing_data$quality=='Good','quality'] <-1
+testing_data[testing_data$quality=='Bad','quality'] <-0
+train_data$quality<- as.factor(train_data$quality)
+testing_data$quality<- as.factor(testing_data$quality)
+y.test <-testing_data$quality
+data_test_no_quality <-testing_data[-c(12)]
+
+gamma1 <- c(0.01, 0.1, 1, 10, 100)
+cost1 <- c(0.01, 0.1, 1, 10, 100)
+
+
+obj.tra <- tune(svm, quality ~ ., data = train_data, ranges = list(gamma = gamma1, 
+                            cost = cost1), kernel = "linear")
+summary(obj.tra)
+```
+(b) Train a svm classifier by using the linear kernel and the corresponding optimal value of hyperparameter C, then make predictions on the testing dataset, report the classification accuracy.
+```{r}
+svm_model <- svm(quality~ ., data=train_data, kernel="linear",gamma= 0.01, cost=1)
+
+summary(svm_model)
+
+y.pred.c1 <-predict(svm_model, newdata=data_test_no_quality)
+#mean of diff between predict and actual data
+mean(y.pred.c1 !=y.test)
+mean(y.pred.c1 ==y.test)
+
+
+```
+(c) Use the training dataset to find out the optimal values of hyperparameters C and γ for an RBF kernel-based svm.
+```{r}
+obj.tra1 <- tune(svm, quality ~ ., data = train_data, ranges = list(gamma = gamma1, 
+                            cost = cost1), kernel = "radial")
+
+summary(obj.tra1)
+
+
+
+
+```
+(d) Train a svm classifier by using the RBF kernel and the corresponding optimal values of hyperparameters C and γ, then make predictions on the testing dataset, report the classification accuracy.
+```{r}
+
+svmfit.radial.1 <-svm(quality~.,
+                           data=train_data,
+                           kernel='radial',
+                           gamma=1,
+                           cost=1,
+                           scale=T
+                           )
+
+model3 <- svm(quality ~ ., data = train_data, gamma = 100, cost = 10, kernel = "radial")
+summary(svmfit.radial.1)
+
+y.pred.c2 <-predict(svmfit.radial.1, newdata=data_test_no_quality)
+
+#mean of diff between predict and actual data
+mean(y.pred.c2 !=y.test)
+mean(y.pred.c2 ==y.test)
+
+
+```
+(e) Train a logistic regression model. Then use the testing dataset to conduct an ROC curve analysis to compare the predictive performance of the trained logistic regression model and those two svm classifiers trained by using linear and RBF kernels respectively.
+
+Hint: Define set.seed(1). Given a pre-defined hyperparameter space - C: [0.01, 0.1, 1, 10, 100], and γ: [0.01, 0.1, 1, 10, 100].
+```{r}
+
+set.seed(1)
+library(caret)
+library(ROCR)
+
+glm.occup.fit <- glm(quality ~ ., 
+                     data = train_data, 
+                     family = "binomial"
+                     )
+summary(glm.occup.fit)
+
+
+trained_model_1 <- glm(quality  ~ ., data = train_data, family = 'binomial')
+
+
+prediction_trained_model_1 <- predict(trained_model_1, testing_data, type='response')
+prediction_trained_model_2 <- predict(svm_model, testing_data, type='response')
+prediction_trained_model_3 <- predict(svmfit.radial.1, testing_data, type='response')
+
+
+pr_trained_model_1 <- prediction(prediction_trained_model_1, testing_data$quality)
+pr_trained_model_2 <- prediction(as.numeric(prediction_trained_model_2), testing_data$quality)
+pr_trained_model_3 <- prediction(as.numeric(prediction_trained_model_3), testing_data$quality)
+
+
+auroc_trained_model_1 <- performance(pr_trained_model_1, measure = "auc")
+auroc_trained_model_2 <- performance(pr_trained_model_2, measure = "auc")
+auroc_trained_model_3 <- performance(pr_trained_model_3, measure = "auc")
+
+
+auroc_trained_model_value_1 <- auroc_trained_model_1@y.values[[1]]
+auroc_trained_model_value_2 <- auroc_trained_model_2@y.values[[1]]
+auroc_trained_model_value_3 <- auroc_trained_model_3@y.values[[1]]
+
+
+
+prf_trained_model_1 <- performance(pr_trained_model_1, measure = "tpr", x.measure = "fpr")
+prf_trained_model_2 <- performance(pr_trained_model_2, measure = "tpr", x.measure = "fpr")
+prf_trained_model_3 <- performance(pr_trained_model_3, measure = "tpr", x.measure = "fpr")
+
+
+
+plot(prf_trained_model_1, col="blue")
+plot(prf_trained_model_2, col="orange", add=TRUE)
+plot(prf_trained_model_3, col="red", add=TRUE)
+
+
+
+```
+```{r}
+
+y.pred.radial.best <- predict(tune.out.radial$best.model, newdata = Wine_dataTrain) 
+summary(y.pred.radial.best)
+print(y.pred.radial.best)
+mean(y.pred.radial.best != Wine_dataTrain)
+
+```
+
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+4. Hierarchical clustering
+
+Consider the USArrests data. We will now perform hierarchical clustering on the states.
+
+(a) Using hierarchical clustering with complete linkage and Euclidean distance, cluster the states.
+```{r}
+
+data("USArrests", package = "datasets")
+set.seed(2)
+hcluster.USA <-  hclust(dist(USArrests), method = "complete")
+plot(hcluster.USA,main="Complete Linkage", cex=0.6)
+
+```
+(b) Cut the dendrogram at a height that results in three distinct clusters. Which states belong to which clusters?
+```{r}
+
+cutree(hcluster.USA, 3)
+table(cutree(hcluster.USA, 3))
+
+```
+(c) Hierarchically cluster the states using complete linkage and Euclidean distance, after scaling the variables to have standard deviation one.
+```{r}
+
+USA_data <-  scale(USArrests)
+hcluster.USA.sd1 <-  hclust(dist(USA_data), method = "complete", sd = 1)
+plot(hcluster.USA.sd1, main="Complete Linkage", cex=0.6)
+
+```
+(d) What effect does scaling the variables have on the hierarchical clustering obtained? In your opinion, should the variables be scaled before the inter-observation dissimilarities are computed? Provide a justification for your answer.
+```{r}
+
+cutree(hcluster.USA.sd1, 3)
+table(cutree(hcluster.USA.sd1, 3))
+table(cutree(hcluster.USA.sd1, 3), cutree(hcluster.USA.sd1, 3))
+
+```
+# The Dentogram which is obtained from hierarchical clustering gets its height affected  when variables are scaled.We can note that the clusters of the dentogram are affected when we cut it into 3 clusters. Thus I believe that the variables be scaled before the inter-observation dissimilarities are computed 
+
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
+5. PCA and K-Means Clustering
+
+(a) Generate a simulated data set with 20 observations in each of three classes (i.e. 60 observations total), and 50 variables.
+
+Hint: There are a number of functions in R that you can use to generate data. One example is the rnorm() function; runif() is another option. Be sure to add a mean shift to the observations in each class so that there are three distinct classes.
+```{r}
+
+ X <- rbind(matrix(rnorm(20*50, mean = 0), nrow = 20), 
+ matrix(rnorm(20*50, mean=1), nrow = 20), 
+ matrix(rnorm(20*50, mean=2), nrow = 20))
+ 
+View(X)
+
+```
+(b) Perform PCA on the 60 observations and plot the first two principal components’ eigenvector. Use a different color to indicate the observations in each of the three classes. If the three classes appear separated in this plot, then continue on to part (c). If not, then return to part (a) and modify the simulation so that there is greater separation between the three classes. Do not continue to part (c) until the three classes show at least some separation in the first two principal component eigenvectors.
+```{r}
+
+X.pca = prcomp(X)$x
+plot(X.pca[,1:2], col=c(rep(1,20), rep(2,20), rep(3,20)))
+
+
+```
+
+
+(c) Perform K-means clustering of the observations with K = 3. How well do the clusters that you obtained in K-means clustering compare to the true class labels?
+
+Hint: You can use the table() function in R to compare the true class labels to the class labels obtained by clustering. Be careful how you interpret the results: K-means clustering will arbitrarily number the clusters, so you cannot simply check whether the true class labels and clustering labels are the same.
+```{r}
+
+km.out <-  kmeans(X, 3, nstart = 20)
+km.out$cluster
+table(km.out$cluster)
+
+#This Table shows that it is a perfect match
+```
+(d) Perform K-means clustering with K = 2. Describe your results.
+```{r}
+
+km.out <-  kmeans(X, 2, nstart = 20)
+km.out$cluster
+table(km.out$cluster)
+
+# All of one previous class is absorber into one single class
+
+```
+(e) Now perform K-means clustering with K = 4, and describe your results.
+```{r}
+
+km.out <-  kmeans(X, 4, nstart = 20)
+km.out$cluster
+table(km.out$cluster)
+
+# All of one previous cluster split into two clusters.
+
+```
+(f) Now perform K-means clustering with K = 3 on the first two principal components, rather than on the raw data. That is, perform K-means clustering on the 60 × 2 matrix of which the first column is the first principal component’s corresponding eigenvector, and the second column is the second principal component’s corresponding eigenvector. Comment on the results.
+```{r}
+
+km.out <-  kmeans(X.pca[, 1:2], 3, nstart = 20)
+km.out$cluster
+table(km.out$cluster)
+
+# Perfect match, once again.
+```
+(g) Using the scale() function, perform K-means clustering with K = 3 on the data after scaling each variable to have standard deviation one. How do these results compare to the true class labels? Will the scaling affect the clustering?
+```{r}
+
+km.out <-  kmeans(scale(X), 3, nstart = 20)
+km.out$cluster
+table(km.out$cluster)
+
+# Poorer results than (b): the scaling of the observations effects the distance between them.
+```
+
+--------------------------------------------------------------------------------------------------------------------------------------------------
+
